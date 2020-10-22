@@ -6,7 +6,7 @@ class ListsController < ApplicationController
     end
 
     def show
-        @list = List.create(params[:id])
+        @list = List.find(params[:id])
         render json: @list
     end
 

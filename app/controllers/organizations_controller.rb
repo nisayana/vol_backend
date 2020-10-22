@@ -6,7 +6,7 @@ class OrganizationsController < ApplicationController
     end
     
     def show
-        @organization = Organization.create(params[:id])
+        @organization = Organization.find(params[:id])
         render json: @organization
     end
 
