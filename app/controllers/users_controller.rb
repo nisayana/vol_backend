@@ -16,9 +16,13 @@ class UsersController < ApplicationController
         @user = User.create(user_params)
         if @user.valid?
             token_tag = encode_token({user_id: @user.id})
-            render json: {user: UserSerializer.new(@user), token: token_tag}, status: 201
+
+            render json: {
+              user: UserSerializer.new(@user), 
+              token: token_tag
+              }
           else
-            render json: {error: "Can't be blank."}
+            render json: {error: "INVALID USER"}, status: 422
         end
     end
 
@@ -26,15 +30,22 @@ class UsersController < ApplicationController
         @user = User.find_by(name: params[:name])
         if @user && @user.authenticate(params[:password])
           token_tag = encode_token({user_id: @user.id})
-          render json: {user: UserSerializer.new(@user), token: token_tag}
+
+          render json: {
+            user: UserSerializer.new(@user), 
+            token: token_tag
+          }
         else
-          render json: {error: "Invalid username or password. Please try again."}
+          render json: {error: "INCORRECT USERNAME OR PASSWORD"}, status: 422
         end
       end
     
       def persist
         token_tag = encode_token({user_id: @user.id})
-        render json: {user: UserSerializer.new(@user), token: token_tag}
+        render json: {
+          user: UserSerializer.new(@user), 
+          token: token_tag
+      }
       end
     
       def profile
@@ -51,13 +62,13 @@ class UsersController < ApplicationController
     def destroy
         @user = User.find(params[:id])
         @user.destroy
-        render json: {message: "Profile has been deleted", usee: @user}
+        render json: {message: "Profile has been deleted", user: @user}
     end
 
     private
 
     def user_params
-        params.permit(:name, :age, :password)
+        params.permit(:name, :password)
     end 
 
 end
