@@ -1,4 +1,3 @@
 class OrganizationSerializer < ActiveModel::Serializer
-  attributes :id, :name, :image, :description
-  has_many :lists
+  attributes :id, :name, :image, :description, :lists, :leadname, :password
 end

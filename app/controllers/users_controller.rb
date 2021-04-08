@@ -2,23 +2,12 @@ class UsersController < ApplicationController
 
     before_action :autorized, only: [:persist]
 
-    def index
-        @users = User.all
-        render json: @users
-    end
-
-    def show
-        @user = User.find(params[:id])
-        render json: @user
-    end
-
     def create 
-        @user = User.create(user_params)
-        if @user.valid?
-            token_tag = encode_token({user_id: @user.id})
-
+        user = User.create(user_params)
+        if user.valid?
+            token_tag = encode_token({user_id: user.id, role: user.class.name})
             render json: {
-              user: UserSerializer.new(@user), 
+              user: UserSerializer.new(user), 
               token: token_tag
               }
           else
@@ -27,12 +16,11 @@ class UsersController < ApplicationController
     end
 
     def login
-        @user = User.find_by(name: params[:name])
-        if @user && @user.authenticate(params[:password])
-          token_tag = encode_token({user_id: @user.id})
-
+        user = User.find_by(name: params[:name])
+        if user && user.authenticate(params[:password])
+          token_tag = encode_token({user_id: user.id, role: user.class.name})
           render json: {
-            user: UserSerializer.new(@user), 
+            user: UserSerializer.new(user), 
             token: token_tag
           }
         else
@@ -40,29 +28,44 @@ class UsersController < ApplicationController
         end
       end
     
-      def persist
-        token_tag = encode_token({user_id: @user.id})
-        render json: {
-          user: UserSerializer.new(@user), 
-          token: token_tag
-      }
+    def persist
+
+        # @user exists here because of the before_action
+        # @user can either be an instance of general user or animal shelter
+        # avoiding repeated code on animal shelter controller this way
+
+        if isLead?
+          token_tag = encode_token({user_id: user.id, role: user.class.name})
+          render json: {
+          user: OrganizationSerializer.new(user), 
+          token: token_tag,
+          role: user.class.name
+        } 
+        else
+          token_tag = encode_token({user_id: user.id, role: user.class.name})
+          render json: {
+          user: UserSerializer.new(user), 
+          token: token_tag,
+          role: user.class.name
+        } 
       end
+    end
     
       def profile
         render json: logged_user
       end
 
     def update 
-        @user = User.find(params[:id])
-        @user.update(user_params)
+        user = User.find(params[:id])
+        user.update(user_params)
 
-        render json: @user
+        render json: user
     end
 
     def destroy
-        @user = User.find(params[:id])
-        @user.destroy
-        render json: {message: "Profile has been deleted", user: @user}
+        user = User.find(params[:id])
+        user.destroy
+        render json: {message: "Profile has been deleted", user: user}
     end
 
     private
