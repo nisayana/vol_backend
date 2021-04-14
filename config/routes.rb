@@ -5,7 +5,7 @@ resources :lists
 resources :organizations
 resources :categories
 
-get '/users/persist', to: "users#persist"
+get '/persist', to: "users#persist"
 resources :users
 
 post '/user_login', to: "users#login"

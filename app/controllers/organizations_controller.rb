@@ -13,7 +13,7 @@ class OrganizationsController < ApplicationController
     end
 
     def login 
-        organization = Organization.find_by(leadname: params[:leadname])
+        organization = Organization.find_by(email: params[:email])
         # byebug
         if organization && organization.authenticate(params[:password])
             token_tag = encode_token({organization_id: organization.id, role: organization.class.name})
@@ -37,11 +37,12 @@ class OrganizationsController < ApplicationController
                 role: 'Organization'
             }
         else
-            render json: {error: 'invalid input'}, status: 422
+            render json: {error: 'Invalid input'}, status: 422
         end
     end
 
     private 
+    
     def organization_params
         params.permit(:email, :password)
     end

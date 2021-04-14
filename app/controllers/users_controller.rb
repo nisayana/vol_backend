@@ -16,7 +16,7 @@ class UsersController < ApplicationController
     end
 
     def login
-        user = User.find_by(name: params[:username])
+        user = User.find_by(email: params[:email])
         # byebug
         if user && user.authenticate(params[:password])
           token_tag = encode_token({user_id: user.id, role: user.class.name})
@@ -32,12 +32,11 @@ class UsersController < ApplicationController
     def persist
 
         # @user exists here because of the before_action
-        # @user can either be an instance of general user or animal shelter
-        # avoiding repeated code on animal shelter controller this way
+        # @user can either be an instance of general user or organization
+        # avoiding repeated code on organization controller this way
 
-
-
-        if @user.email 
+        if isOrganization? 
+          # byebug
           token_tag = encode_token({user_id: @user.id, role: @user.class.name})
           render json: {
             user: OrganizationSerializer.new(@user), 
