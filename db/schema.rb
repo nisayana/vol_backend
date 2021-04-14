@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_06_011817) do
+ActiveRecord::Schema.define(version: 2021_04_13_133447) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2021_04_06_011817) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "leadname"
     t.string "password_digest"
+    t.string "email"
     t.index ["category_id"], name: "index_organizations_on_category_id"
   end
 
@@ -62,6 +63,7 @@ ActiveRecord::Schema.define(version: 2021_04_06_011817) do
     t.string "password_digest"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "email"
   end
 
   add_foreign_key "dash_list_joiners", "lists"

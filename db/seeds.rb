@@ -28,7 +28,7 @@ List.reset_pk_sequence
 User.reset_pk_sequence
 DashListJoiner.reset_pk_sequence
 
-user1 = User.create(name: "Sam", age: 25, password: "abc123")
+user1 = User.create(name: "Sam", age: 25, password: "abc123", email: "sam@gmail.com")
 
 # Category
 education = Category.create(name: "Education", image: "https://img.rawpixel.com/s3fs-private/rawpixel_images/website_content/k-67-chim-10570_1.jpg?w=800&dpr=1&fit=default&crop=default&q=65&vib=3&con=3&usm=15&bg=F4F4F3&ixlib=js-2.2.1&s=07c3f30c8149803bba5e05c05fb86cb4")

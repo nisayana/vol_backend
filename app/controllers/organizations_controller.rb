@@ -13,7 +13,8 @@ class OrganizationsController < ApplicationController
     end
 
     def login 
-        organization = Organization.find_by(name: params[:name])
+        organization = Organization.find_by(leadname: params[:leadname])
+        # byebug
         if organization && organization.authenticate(params[:password])
             token_tag = encode_token({organization_id: organization.id, role: organization.class.name})
             render json: {
@@ -42,7 +43,7 @@ class OrganizationsController < ApplicationController
 
     private 
     def organization_params
-        params.permit(:leadname, :password)
+        params.permit(:email, :password)
     end
 
 end
